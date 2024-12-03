@@ -1,6 +1,4 @@
-{% extends 'base.html' %}
-
-{% block title %}{{ movie.title }}{% endblock %}
+{% extends 'netflixuax/base.html' %}
 
 {% block content %}
 <div class="container py-5">
@@ -13,7 +11,8 @@
             <p><strong>Descripción:</strong> {{ movie.overview }}</p>
             <p><strong>Fecha de estreno:</strong> {{ movie.release_date }}</p>
             <p><strong>Puntuación:</strong> {{ movie.vote_average }}/10</p>
-            <a href="{% url 'streaming:home' %}" class="btn btn-danger">Volver a la página principal</a>
+            <p><strong>Duración:</strong> {{ movie.runtime }} minutos</p>
+            <a href="{% url 'streaming:movies-list' %}" class="btn btn-danger">Volver a la lista</a>
         </div>
     </div>
 </div>

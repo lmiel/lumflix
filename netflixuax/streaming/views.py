@@ -14,14 +14,14 @@ def home(request):
     print("Requesting home")
     # fetch_and_store_movies()
     movies = Movie.objects.all()
-    return render(request, 'home.html', {'movies': movies})
+    return render(request, 'streaming/home.html', {'movies': movies})
 
 # Vista Home para plantillas
 def base(request):
     print("Requesting home")
     # fetch_and_store_movies()
     # movies = Movie.objects.all()
-    return render(request, 'base.html')
+    return render(request, 'streaming/base.html')
 
 # Vistas para la API
 class MovieListView(APIView):
@@ -74,16 +74,16 @@ def popular_movies(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+# carpeta: streaming/views.py
 def movie_details(request, movie_id):
-    """Vista para mostrar detalles de una película usando la API de TMDb."""
+    """Vista para mostrar detalles de una película específica."""
     try:
-        # Llamar a la función que interactúa con la API de TMDb
-        movie_data = fetch_movie_details(movie_id)
-        # Renderizar los datos en la plantilla
-        return render(request, 'movie_detail.html', {'movie': movie_data})
+        # Llamar al endpoint de TMDb para detalles de la película
+        movie_data = fetch_movies_from_tmdb(f'movie/{movie_id}')
+        return render(request, 'streaming/movie_detail.html', {'movie': movie_data})
     except Exception as e:
-        return HttpResponse(f"Error al obtener detalles de la película: {str(e)}", status=500)
-    
+        return render(request, 'streaming/error.html', {'error_message': str(e)}, status=500)
+
 # carpeta: streaming/views.py
 # carpeta: streaming/views.py
 # carpeta: streaming/views.py
@@ -101,10 +101,7 @@ def series_list(request):
         # Llamar a TMDb con filtros aplicados
         series_data = fetch_movies_from_tmdb('discover/tv', params)
         series = series_data.get('results', [])
-        
-        # Depuración: Mostrar en consola los resultados procesados
-        print("Series después de aplicar filtros:", series)
-        
+
         # Ordenar por rating y limitar
         sorted_series = sorted(series, key=lambda x: x.get('vote_average', 0), reverse=True)
         top_series = sorted_series[:20]
@@ -112,14 +109,14 @@ def series_list(request):
         # Obtener géneros disponibles
         genres = fetch_genres()
 
-        return render(request, 'series_list.html', {
+        return render(request, 'streaming/series_list.html', {
             'series': top_series,
             'country': country,
             'genres': genres,
             'genre': genre
         })
     except Exception as e:
-        return render(request, 'error.html', {'error_message': str(e)}, status=500)
+        return render(request, 'streaming/error.html', {'error_message': str(e)}, status=500)
     
 
 # carpeta: streaming/views.py
@@ -131,3 +128,41 @@ def series_details(request, series_id):
         return render(request, 'series_detail.html', {'series': series_data})
     except Exception as e:
         return render(request, 'error.html', {'error_message': str(e)}, status=500)
+    
+    
+    
+# carpeta: streaming/views.py
+def movies_list(request):
+    """Vista para mostrar películas populares, con filtros por país y género."""
+    try:
+        country = request.GET.get('country')  # Filtro por país
+        genre = request.GET.get('genre')  # Filtro por género
+        params = {}
+        if country:
+            params['with_origin_country'] = country
+        if genre:
+            params['with_genres'] = genre
+        
+        # Usar el endpoint de descubrimiento para películas
+        for i in range(1, 6):
+            params['page'] = i
+        movies_data = fetch_movies_from_tmdb('discover/movie', params)
+        movies = movies_data.get('results', [])
+        
+        # Ordenar por rating
+        sorted_movies = sorted(movies, key=lambda x: x.get('vote_average', 0), reverse=True)
+        top_movies = sorted_movies[:30]
+        
+        # Obtener lista de géneros disponibles
+        genres = fetch_genres()
+
+        return render(request, 'movie_list.html', {
+            'movies': top_movies,
+            'country': country,
+            'genres': genres,
+            'genre': genre
+        })
+    except Exception as e:
+        return render(request, 'error.html', {'error_message': str(e)}, status=500)
+
+

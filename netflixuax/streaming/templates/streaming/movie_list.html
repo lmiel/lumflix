@@ -1,9 +1,8 @@
-<!-- carpeta: streaming/templates/series_list.html -->
-{% extends 'base.html' %}
+{% extends 'netflixuax/base.html' %}
 
 {% block content %}
 <div class="container py-5">
-    <h1 class="mb-4">Series Populares</h1>
+    <h1 class="mb-4">Películas Populares</h1>
 
     <!-- Formulario de filtros -->
     <form method="get" class="mb-4 d-flex align-items-center">
@@ -30,17 +29,17 @@
     </form>
 
     <!-- Mostrar resultados -->
-    {% if series %}
+    {% if movies %}
     <div class="row g-4">
-        {% for serie in series %}
+        {% for movie in movies %}
         <div class="col-md-4 col-lg-3">
             <div class="card bg-dark text-white h-100">
-                <a href="{% url 'streaming:series-details-page' serie.id %}">
-                    <img src="https://image.tmdb.org/t/p/w500{{ serie.poster_path }}" class="card-img-top" alt="{{ serie.name }}">
+                <a href="{% url 'streaming:movie-details-page' movie.id %}">
+                    <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" class="card-img-top" alt="{{ movie.title }}">
                 </a>
                 <div class="card-body text-center">
-                    <h5 class="card-title">{{ serie.name }}</h5>
-                    <p class="card-text">Rating: {{ serie.vote_average }}</p>
+                    <h5 class="card-title">{{ movie.title }}</h5>
+                    <p class="card-text">Rating: {{ movie.vote_average }}</p>
                 </div>
             </div>
         </div>
@@ -48,7 +47,7 @@
     </div>
     {% else %}
     <div class="text-center text-muted">
-        <p>No se encontraron series para los filtros seleccionados.</p>
+        <p>No se encontraron películas para los filtros seleccionados.</p>
     </div>
     {% endif %}
 </div>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero text-center text-white d-flex align-items-center justify-content-center" style="height: 60vh; background: url('hero-background.jpg') center center / cover no-repeat; position: relative;">
+    <div class="hero-content container position-relative z-index-2">
+        <h2 class="display-4">Explora las mejores películas y series</h2>
+        <p class="lead">Disfruta del contenido que amas, cuando y donde quieras.</p>
+        <a href="#" class="btn btn-danger btn-lg">Ver ahora</a>
+    </div>
+    <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, rgba(229, 9, 20, 0.75), #141414);"></div>
+</section>
+
+<main class="movies-container container py-5">
+    <div class="row g-4">
+        {% for movie in movies %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card bg-dark text-white h-100">
+                <!-- Cambia el enlace para que apunte a la vista de detalles de la película -->
+                <a href="{% url 'streaming:movie-details-page' movie.tmdb_id %}">
+                    <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}">
+                </a>
+                <div class="card-body" style="display: flex; justify-content: center;">
+                    <h5 class="card-title">{{ movie.title }}</h5>
+                    <!-- Puedes habilitar estos campos si los necesitas -->
+                    <!-- <p class="card-text">{{ movie.description }}</p> -->
+                    <!-- <p class="text-muted">Fecha de estreno: {{ movie.release_date }}</p> -->
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

@@ -9,25 +9,172 @@
     </div>
     <div class="overlay position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, rgba(229, 9, 20, 0.75), #141414);"></div>
 </section>
+<div class="container py-5">
 
-<main class="movies-container container py-5">
-    <div class="row g-4">
-        {% for movie in movies %}
-        <div class="col-md-4 col-lg-3">
-            <div class="card bg-dark text-white h-100">
-                <!-- Cambia el enlace para que apunte a la vista de detalles de la película -->
-                <a href="{% url 'streaming:movie-details-page' movie.tmdb_id %}">
-                    <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}">
-                </a>
-                <div class="card-body" style="display: flex; justify-content: center;">
-                    <h5 class="card-title">{{ movie.title }}</h5>
-                    <!-- Puedes habilitar estos campos si los necesitas -->
-                    <!-- <p class="card-text">{{ movie.description }}</p> -->
-                    <!-- <p class="text-muted">Fecha de estreno: {{ movie.release_date }}</p> -->
+
+    <!-- Sección de "Más Populares" -->
+    <h2 class="mb-3">Más Populares</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            {% for item in popular_movies %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:movie-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.title }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
+            {% for item in popular_series %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:series-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.name }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
     </div>
-</main>
+
+    <!-- Sección de "Animación" -->
+    <h2 class="mb-3">Animación</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            {% for item in animation_movies %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:movie-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.title }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% for item in animation_series %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:series-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.name }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    <!-- Sección de "Romance" -->
+    <h2 class="mb-3">Romance</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            {% for item in romance_movies %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:movie-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.title }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% for item in romance_series %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:series-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.name }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    <!-- Sección de "Acción y Aventura" -->
+    <h2 class="mb-3">Acción y Aventura</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            {% for item in action_movies %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:movie-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.title }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% for item in action_series %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:series-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.name }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+
+    <!-- Sección de "Documentales" -->
+    <h2 class="mb-3">Documentales</h2>
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            {% for item in documentary_movies %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:movie-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.title }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% for item in documentary_series %}
+            <div class="swiper-slide">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:series-details-page' item.id %}">
+                        <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" class="card-img-top" alt="{{ item.name }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
 {% endblock %}

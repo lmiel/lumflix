@@ -11,11 +11,47 @@ from .utils import fetch_movies_from_tmdb
 from .utils import fetch_genres
 # Vista Home para plantillas
 def home(request):
-    print("Requesting home")
-    # fetch_and_store_movies()
-    movies = Movie.objects.all()
-    return render(request, 'streaming/home.html', {'movies': movies})
+    """Vista para mostrar la página de inicio con películas y series populares."""
+    try:
+        # Películas populares
+        popular_movies = fetch_movies_from_tmdb('movie/popular')['results'][:10]
+        
+        # Series populares
+        popular_series = fetch_movies_from_tmdb('tv/popular')['results'][:10]
 
+        # Películas de animación
+        animation_movies = fetch_movies_from_tmdb('discover/movie', {'with_genres': 16})['results'][:10]
+
+        # Series de animación
+        animation_series = fetch_movies_from_tmdb('discover/tv', {'with_genres': 16})['results'][:10]
+
+        # Agrega más categorías si es necesario
+        # Ejemplo: películas de romance
+        romance_movies = fetch_movies_from_tmdb('discover/movie', {'with_genres': 10749})['results'][:10]
+        romance_series = fetch_movies_from_tmdb('discover/tv', {'with_genres': 10749})['results'][:10]
+
+        action_movies = fetch_movies_from_tmdb('discover/movie', {'with_genres': 28})['results'][:10]
+        action_series = fetch_movies_from_tmdb('discover/tv', {'with_genres': 10759})['results'][:10]
+
+        # Películas y series documentales
+        documentary_movies = fetch_movies_from_tmdb('discover/movie', {'with_genres': 99})['results'][:10]
+        documentary_series = fetch_movies_from_tmdb('discover/tv', {'with_genres': 99})['results'][:10]
+
+        # Renderiza la plantilla con los datos obtenidos
+        return render(request, 'streaming/home.html', {
+            'popular_movies': popular_movies,
+            'popular_series': popular_series,
+            'animation_movies': animation_movies,
+            'animation_series': animation_series,
+            'romance_movies': romance_movies,
+            'romance_series': romance_series,
+            'action_movies': action_movies,
+            'action_series': action_series,
+            'documentary_movies': documentary_movies,
+            'documentary_series': documentary_series,
+        })
+    except Exception as e:
+        return render(request, 'streaming/error.html', {'error_message': str(e)}, status=500)
 # Vista Home para plantillas
 def base(request):
     print("Requesting home")

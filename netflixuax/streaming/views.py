@@ -156,13 +156,13 @@ def movies_list(request):
         # Obtener lista de géneros disponibles
         genres = fetch_genres()
 
-        return render(request, 'movie_list.html', {
+        return render(request, 'streaming/movie_list.html', {
             'movies': top_movies,
             'country': country,
             'genres': genres,
             'genre': genre
         })
     except Exception as e:
-        return render(request, 'error.html', {'error_message': str(e)}, status=500)
+        return render(request, 'streaming/error.html', {'error_message': str(e)}, status=500)
 
 

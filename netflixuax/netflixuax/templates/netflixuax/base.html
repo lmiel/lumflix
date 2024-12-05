@@ -33,8 +33,9 @@
               <a class="nav-link" href="{% url 'streaming:movies-list' %}">Películas</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Mi lista</a>
-            </li>
+              <a class="nav-link" href="{% url 'streaming:my-list' %}">Mi lista</a>
+          </li>
+          
             {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'authentication:logout' %}">Cerrar Sesión</a>

@@ -1,19 +1,35 @@
+<!-- carpeta: streaming/templates/streaming/movie_detail.html -->
 {% extends 'netflixuax/base.html' %}
 
 {% block content %}
 <div class="container py-5">
     <div class="row">
         <div class="col-md-4">
-            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}" class="img-fluid">
+            <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}" alt="{{ movie.title }}" class="img-fluid rounded">
         </div>
         <div class="col-md-8">
-            <h1>{{ movie.title }}</h1>
-            <p><strong>Descripción:</strong> {{ movie.overview }}</p>
-            <p><strong>Fecha de estreno:</strong> {{ movie.release_date }}</p>
-            <p><strong>Puntuación:</strong> {{ movie.vote_average }}/10</p>
-            <p><strong>Duración:</strong> {{ movie.runtime }} minutos</p>
-            <a href="{% url 'streaming:movies-list' %}" class="btn btn-danger">Volver a la lista</a>
+            <h1 class="mb-4">{{ movie.title }}</h1>
+            <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date }}</p>
+            <p><strong>Calificación:</strong> {{ movie.vote_average }} / 10</p>
+            <p>{{ movie.overview }}</p>
+            <button class="btn btn-primary" onclick="addToList({{ movie.tmdb_id }})">Añadir a Mi Lista</button>
         </div>
     </div>
 </div>
+
+<script>
+    function addToList(movieId) {
+        fetch(`/my-list/add/${movieId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => console.error(error));
+    }
+</script>
 {% endblock %}

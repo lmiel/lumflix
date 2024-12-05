@@ -9,6 +9,11 @@ from .utils import fetch_popular_movies, fetch_movie_details
 from .scripts.import_movies import fetch_and_store_movies
 from .utils import fetch_movies_from_tmdb
 from .utils import fetch_genres
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from .models import UserList, Movie
+from django.views.decorators.csrf import csrf_exempt
 # Vista Home para plantillas
 def home(request):
     """Vista para mostrar la página de inicio con películas y series populares."""
@@ -202,3 +207,37 @@ def movies_list(request):
         return render(request, 'streaming/error.html', {'error_message': str(e)}, status=500)
 
 
+def my_list(request):
+    """Vista para mostrar la lista del usuario."""
+    user_list, created = UserList.objects.get_or_create(user=request.user)
+    return render(request, 'streaming/my_list.html', {'movies': user_list.movies.all()})
+
+
+@csrf_exempt
+@login_required
+def add_to_list(request, movie_id):
+    """Vista para añadir una película a la lista del usuario."""
+    if request.method == 'POST':
+        try:
+            # Obtiene o crea la lista del usuario
+            user_list, _ = UserList.objects.get_or_create(user=request.user)
+
+            # Obtiene o crea la película con el `tmdb_id`
+            movie, _ = Movie.objects.get_or_create(tmdb_id=movie_id)
+
+            # Agrega la película a la lista
+            user_list.movies.add(movie)
+
+            return JsonResponse({'message': 'Película añadida a tu lista'}, status=200)
+        except Exception as e:
+            return JsonResponse({'message': f'Error al añadir la película: {str(e)}'}, status=500)
+    return JsonResponse({'message': 'Método no permitido'}, status=405)
+
+@login_required
+def remove_from_list(request, movie_id):
+    """Eliminar una película de la lista del usuario."""
+    if request.method == 'POST':
+        movie = get_object_or_404(Movie, tmdb_id=movie_id)
+        user_list = get_object_or_404(UserList, user=request.user)
+        user_list.movies.remove(movie)
+        return JsonResponse({'message': 'Película eliminada de tu lista.'})

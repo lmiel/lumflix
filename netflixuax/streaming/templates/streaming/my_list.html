@@ -1,0 +1,43 @@
+{% extends 'netflixuax/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Mi Lista</h1>
+    {% if movies %}
+        <div class="row g-4">
+            {% for movie in movies %}
+            <div class="col-md-3">
+                <div class="card bg-dark text-white h-100">
+                    <a href="{% url 'streaming:movie-details-page' movie.tmdb_id %}">
+                        <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}">
+                    </a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ movie.title }}</h5>
+                        <button class="btn btn-danger" onclick="removeFromList({{ movie.tmdb_id }})">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No tienes películas en tu lista.</p>
+    {% endif %}
+</div>
+
+<script>
+    function removeFromList(movieId) {
+        fetch(`/my-list/remove/${movieId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => console.error(error));
+    }
+</script>
+{% endblock %}

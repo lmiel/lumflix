@@ -15,7 +15,8 @@ class Movie(models.Model):
     
 class UserList(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_list')
-    movies = models.ManyToManyField(Movie, related_name='in_user_lists', blank=True)
+    #list of Integers
+    movies_id = models.ManyToManyField(Movie, related_name='user_list')
 
     def __str__(self):
         return f"Lista de {self.user.username}"

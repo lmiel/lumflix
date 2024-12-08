@@ -13,8 +13,28 @@
             <p><strong>Primera emisión:</strong> {{ series.first_air_date }}</p>
             <p><strong>Puntuación:</strong> {{ series.vote_average }}/10</p>
             <p><strong>Número de temporadas:</strong> {{ series.number_of_seasons }}</p>
-            <a href="{% url 'streaming:series-list' %}" class="btn btn-danger">Volver a la lista</a>
+            {% if user.is_authenticated %}
+                <button class="btn btn-primary" onclick="addToList({{ movie_id }})">Añadir a Mi Lista</button>
+            {% else %}
+                <a href='/auth/login' class="btn btn-primary">Inicia sesión para añadir a Mi Lista</a>
+            {% endif %}
         </div>
     </div>
 </div>
+<script>
+    function addToList(movieId) {
+        console.log(movieId);
+        fetch(`/my-list/add/${movieId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => console.error(error));
+    }
+</script>
 {% endblock %}

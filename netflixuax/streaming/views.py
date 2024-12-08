@@ -121,7 +121,7 @@ def movie_details(request, movie_id):
     try:
         # Llamar al endpoint de TMDb para detalles de la película
         movie_data = fetch_movies_from_tmdb(f'movie/{movie_id}')
-        return render(request, 'streaming/movie_detail.html', {'movie': movie_data})
+        return render(request, 'streaming/movie_detail.html', {'movie': movie_data, 'movie_id': movie_id})
     except Exception as e:
         return render(request, 'streaming/error.html', {'error_message': str(e)}, status=500)
 
@@ -166,9 +166,9 @@ def series_details(request, series_id):
     try:
         # Llamar al endpoint de TMDb para detalles de la serie
         series_data = fetch_movies_from_tmdb(f'tv/{series_id}')
-        return render(request, 'series_detail.html', {'series': series_data})
+        return render(request, 'streaming/series_detail.html', {'series': series_data})
     except Exception as e:
-        return render(request, 'error.html', {'error_message': str(e)}, status=500)
+        return render(request, 'streaming/error.html', {'error_message': str(e)}, status=500)
     
     
     
@@ -209,8 +209,10 @@ def movies_list(request):
 
 def my_list(request):
     """Vista para mostrar la lista del usuario."""
+    if not request.user.is_authenticated:
+        return render(request, 'streaming/my_list.html')
     user_list, created = UserList.objects.get_or_create(user=request.user)
-    return render(request, 'streaming/my_list.html', {'movies': user_list.movies.all()})
+    return render(request, 'streaming/my_list.html', {'movies': user_list.movies_id.all()})
 
 
 @csrf_exempt
@@ -221,12 +223,27 @@ def add_to_list(request, movie_id):
         try:
             # Obtiene o crea la lista del usuario
             user_list, _ = UserList.objects.get_or_create(user=request.user)
-
-            # Obtiene o crea la película con el `tmdb_id`
-            movie, _ = Movie.objects.get_or_create(tmdb_id=movie_id)
-
-            # Agrega la película a la lista
-            user_list.movies.add(movie)
+            # Checa si la película esta en la base de datos
+            print(f'La película con ID {movie_id} atos.')
+            
+            movie = Movie.objects.filter(tmdb_id=movie_id).first()
+            if not movie:
+                print(f'La película con ID {movie_id} no está en la base de datos.')
+                # Si no está, obtiene los detalles de la película de TMDb
+                movie_data = fetch_movies_from_tmdb(f'movie/{movie_id}')
+                # Crea un nuevo objeto Movie con los datos obtenidos
+                movie = Movie.objects.create(
+                    title=movie_data['title'],
+                    description=movie_data['overview'],
+                    release_date=movie_data['release_date'],
+                    poster_url="https://image.tmdb.org/t/p/w500"+movie_data['poster_path'],
+                    backdrop_url="https://image.tmdb.org/t/p/w500"+movie_data['backdrop_path'],
+                    tmdb_id=movie_data['id']
+                )
+            # # Obtiene o crea la película con el `tmdb_id`
+            # movie, _ = Movie.objects.get_or_create(tmdb_id=movie_id)
+            # # Agrega la película a la lista
+            user_list.movies_id.add(movie)
 
             return JsonResponse({'message': 'Película añadida a tu lista'}, status=200)
         except Exception as e:
@@ -239,5 +256,5 @@ def remove_from_list(request, movie_id):
     if request.method == 'POST':
         movie = get_object_or_404(Movie, tmdb_id=movie_id)
         user_list = get_object_or_404(UserList, user=request.user)
-        user_list.movies.remove(movie)
+        user_list.movies_id.remove(movie)
         return JsonResponse({'message': 'Película eliminada de tu lista.'})

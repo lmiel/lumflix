@@ -12,13 +12,18 @@
             <p><strong>Fecha de lanzamiento:</strong> {{ movie.release_date }}</p>
             <p><strong>Calificación:</strong> {{ movie.vote_average }} / 10</p>
             <p>{{ movie.overview }}</p>
-            <button class="btn btn-primary" onclick="addToList({{ movie.tmdb_id }})">Añadir a Mi Lista</button>
+            {% if user.is_authenticated %}
+                <button class="btn btn-primary" onclick="addToList({{ movie_id }})">Añadir a Mi Lista</button>
+            {% else %}
+                <a href='/auth/login' class="btn btn-primary">Inicia sesión para añadir a Mi Lista</a>
+            {% endif %}
         </div>
     </div>
 </div>
 
 <script>
     function addToList(movieId) {
+        console.log(movieId);
         fetch(`/my-list/add/${movieId}/`, {
             method: 'POST',
             headers: {

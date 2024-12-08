@@ -34,8 +34,8 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'streaming:my-list' %}">Mi lista</a>
-          </li>
-          
+            </li>
+            
             {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'authentication:logout' %}">Cerrar Sesión</a>
@@ -56,6 +56,7 @@
     <!-- Contenido específico de cada página -->
     <main>
       {% block content %}
+
       {% endblock %}
     </main>
 
@@ -89,11 +90,11 @@
           spaceBetween: 10,
           navigation: {
             nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            prevEl: '.swiper-button-prev'
           },
-          loop: true,
-        });
-      });
+          loop: true
+        })
+      })
     </script>
   </body>
 </html>

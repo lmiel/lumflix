@@ -2,7 +2,7 @@
 import os
 import sys
 
-TMDB_API_KEY= 'c2dc323ab66e5495c27791ea6469e55e'
+TMDB_API_KEY = "c2dc323ab66e5495c27791ea6469e55e"
 
 
 if __name__ == "__main__":
@@ -14,4 +14,3 @@ if __name__ == "__main__":
             "Couldn't import Django. Are you sure it's installed and available on your PYTHONPATH environment variable?"
         ) from exc
     execute_from_command_line(sys.argv)
-

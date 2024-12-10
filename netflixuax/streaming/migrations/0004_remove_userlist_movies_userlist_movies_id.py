@@ -4,19 +4,20 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('streaming', '0003_userlist'),
+        ("streaming", "0003_userlist"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='userlist',
-            name='movies',
+            model_name="userlist",
+            name="movies",
         ),
         migrations.AddField(
-            model_name='userlist',
-            name='movies_id',
-            field=models.ManyToManyField(related_name='user_list', to='streaming.movie'),
+            model_name="userlist",
+            name="movies_id",
+            field=models.ManyToManyField(
+                related_name="user_list", to="streaming.movie"
+            ),
         ),
     ]

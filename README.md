@@ -1,5 +1,6 @@
 # LUMFLIX
 Link web: lumflix.vercel.app
+
 Link GitHub: https://github.com/lmiel/lumflix.git
 
 Lumflix es una aplicación de streaming basada en Django que permite explorar películas y series populares con una interfaz moderna y responsiva gracias a Bootstrap.

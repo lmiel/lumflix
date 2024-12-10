@@ -1,5 +1,7 @@
+django
 djangorestframework-simplejwt
 python-decouple
 requests
 django-bootstrap4
 psycopg[binary]
+whitenoise

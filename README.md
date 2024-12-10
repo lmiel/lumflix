@@ -1,5 +1,5 @@
 # LUMFLIX
-Link web: lumflix.vercel.app
+Link web: https://lumflix.vercel.app
 
 Link GitHub: https://github.com/lmiel/lumflix.git
 

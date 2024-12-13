@@ -14,7 +14,7 @@
             <p><strong>Puntuación:</strong> {{ series.vote_average }}/10</p>
             <p><strong>Número de temporadas:</strong> {{ series.number_of_seasons }}</p>
             {% if user.is_authenticated %}
-                <button class="btn btn-primary" onclick="addToList({{ movie_id }})">Añadir a Mi Lista</button>
+                <button class="btn btn-primary" onclick="addToList({{ series_id }})">Añadir a Mi Lista</button>
             {% else %}
                 <a href='/auth/login' class="btn btn-primary">Inicia sesión para añadir a Mi Lista</a>
             {% endif %}
@@ -24,7 +24,7 @@
 <script>
     function addToList(movieId) {
         console.log(movieId);
-        fetch(`/my-list/add/${movieId}/`, {
+        fetch(`/my-list/add/series/${movieId}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}',

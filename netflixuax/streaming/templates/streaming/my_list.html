@@ -9,7 +9,13 @@
           {% for movie in movies %}
             <div class="col-md-3">
               <div class="card bg-dark text-white h-100">
-                <a href="{% url 'streaming:movie-details-page' movie.tmdb_id %}"><img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}" /></a>
+                <a href="{% if movie.is_series %}
+                    {% url 'streaming:series-details-page' movie.tmdb_id %}
+                  {% else %}
+                    {% url 'streaming:movie-details-page' movie.tmdb_id %}
+                  {% endif %}">
+                  <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}" />
+                </a>
                 <div class="card-body">
                   <h5 class="card-title">{{ movie.title }}</h5>
                   <button class="btn btn-danger" onclick="removeFromList({{ movie.tmdb_id }})">Eliminar</button>
@@ -42,7 +48,9 @@
   {% else %}
     <div class="container py-5">
       <h1 class="mb-4 text-center">Mi Lista</h1>
-      <p class="text-center"> <a href="/auth/login">Inicia sesión</a> o <a href="/auth/register">registrate</a> para ver tu lista.</p>
+      <p class="text-center">
+        <a href="/auth/login">Inicia sesión</a> o <a href="/auth/register">registrate</a> para ver tu lista.
+      </p>
     </div>
   {% endif %}
 {% endblock %}

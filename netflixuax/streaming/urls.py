@@ -3,7 +3,7 @@ from .views import home
 from .views import movie_details
 from .views import series_list, series_details
 from .views import movies_list
-from .views import my_list, add_to_list, remove_from_list
+from .views import my_list, add_to_list_m, add_to_list_s, remove_from_list
 
 app_name = "streaming"
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path("movies/", movies_list, name="movies-list"),
     path("movie/<int:movie_id>/", movie_details, name="movie-details-page"),
     path("my-list/", my_list, name="my-list"),
-    path("my-list/add/<int:movie_id>/", add_to_list, name="add-to-list"),
+    path("my-list/add/movie/<int:movie_id>/", add_to_list_m, name="add-to-list"),
+    path("my-list/add/series/<int:series_id>/", add_to_list_s, name="add-to-list"),
     path("my-list/remove/<int:movie_id>/", remove_from_list, name="remove-from-list"),
 ]

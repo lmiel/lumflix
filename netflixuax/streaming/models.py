@@ -9,6 +9,7 @@ class Movie(models.Model):
     poster_url = models.URLField()
     backdrop_url = models.URLField()
     tmdb_id = models.IntegerField(unique=True)
+    is_series = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
